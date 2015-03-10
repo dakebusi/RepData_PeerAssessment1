@@ -57,6 +57,14 @@ median(total_steps_per_day)
 
 ## What is the average daily activity pattern?
 
+Convert the intervals from numeric value to time (e.g. 235 to a time 02:35) and add it as a new column:
+
+
+```r
+activity$time_interval <- strptime(sprintf("%04d", as.numeric(activity$interval)), 
+                      format="%H%M")
+```
+
 Compute the mean number of steps for each interval, ignoring missing values:
 
 
@@ -65,17 +73,11 @@ mean_steps_per_interval <- tapply(activity$steps,activity$interval,
                                   mean, na.rm=TRUE)
 ```
 
-Get the intervals for each day (12 five-mintues-intervals x 24 hours = 288 intervals):
-
-```r
-intervals <- activity$interval[1:288]
-```
-
 Now plot the mean number of steps per interval:
 
 
 ```r
-plot(intervals, mean_steps_per_interval, type='l', 
+plot(activity$time_interval[1:288], mean_steps_per_interval, type='l', 
      xlab='Interval', ylab='Mean number of steps', 
      main = "Daily activity pattern (averaged)")
 ```
@@ -95,7 +97,7 @@ mean_steps_per_interval[max_interval]
 ## 206.1698
 ```
 
-The interval with maximum number of steps is 835 (i.e. 08:35), with 206.1698113 steps.
+The interval with maximum number of steps is 835, with 206.1698113 steps.
 
 
 ## Imputing missing values
@@ -192,11 +194,11 @@ Create two data frames containing each interval, its mean number of steps, and t
 
 
 ```r
-df_weekdays <- data.frame("interval" = intervals, 
+df_weekdays <- data.frame("interval" = new_activity$time_interval[1:288], 
                           "mean_steps" = mean_steps_per_interval_weekday, 
                           "day_type" = "weekday")
 
-df_weekends <- data.frame("interval" = intervals, 
+df_weekends <- data.frame("interval" = new_activity$time_interval[1:288],
                           "mean_steps" = mean_steps_per_interval_weekend, 
                           "day_type" = "weekend")
 
@@ -210,7 +212,11 @@ Plot the time series of average number of steps per interval, split by day type:
 library(lattice)
 xyplot(mean_steps ~ interval | day_type, data = df_mean_steps, 
        type="l", layout=c(1,2), xlab = "Interval", ylab = "Number of steps",
-       main = "Daily activity pattern (averaged)")
+       main = "Daily activity pattern (averaged)",
+       scales=list(
+     x=list(at= seq(as.POSIXct("2015-03-10"), by="3 hour", length=24), 
+     labels=format(seq(as.POSIXct("2015-03-10"), by="3 hour", length=24),
+                   "%H:%M"))))
 ```
 
 ![plot of chunk unnamed-chunk-18](figure/unnamed-chunk-18-1.png) 
