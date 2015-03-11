@@ -85,10 +85,10 @@ length(nas)
 
 There are `r length(nas)` intervals with missing values.
 
-The missing values will be replaced by the mean value of the given 5-minute interval. First replicate the vector with mean number of steps per interval, so that it has the same lenght as the activity data (61 days):
+The missing values will be replaced by the mean value (rounded) of the given 5-minute interval. First replicate the vector with mean number of steps per interval, so that it has the same lenght as the activity data (61 days):
 
 ```{r}
-repeated_means <- rep(mean_steps_per_interval, times=61)
+repeated_means <- round(rep(mean_steps_per_interval, times=61))
 ```
 
 Now copy the activity to a new dataset and assign these values only to missing entries:
@@ -104,7 +104,7 @@ Sum the number of steps for each date in the new dataset:
 total_steps_per_day_new <- tapply(new_activity$steps,new_activity$date, sum)
 ```
 
-Plot the histogram of total number of steps per day:
+Plot the histogram of total number of steps per day of new dataset:
 ```{r}
 hist(total_steps_per_day_new, xlab = "Total steps per day", main = "Histogram of total steps per day")
 ```
@@ -116,7 +116,7 @@ mean(total_steps_per_day_new)
 median(total_steps_per_day_new)
 ```
 
-The value of the mean is unchanged (since we replaced missing values by the already computed mean, so the new mean doesn't change). However, the median sligthly changed due to the addition of new values. **This shows that one has to be careful when replacing missing values!** 
+The values of the mean and median sligthly changed due to the addition of new values. **This shows that one has to be careful when replacing missing values!** 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -161,7 +161,10 @@ xyplot(mean_steps ~ interval | day_type, data = df_mean_steps,
        type="l", layout=c(1,2), xlab = "Interval", ylab = "Number of steps",
        main = "Daily activity pattern (averaged)",
        scales=list(
-     x=list(at= seq(as.POSIXct("2015-03-10"), by="3 hour", length=24), 
-     labels=format(seq(as.POSIXct("2015-03-10"), by="3 hour", length=24),
-                   "%H:%M"))))
+            x=list(
+              at= seq(as.POSIXct(df_mean_steps$interval[1]), by="4 hour", length=24), 
+              labels=format(seq(as.POSIXct(df_mean_steps$interval[1]), by="4 hour", length=24),"%H:%M")
+            )
+          )
+      )
 ```

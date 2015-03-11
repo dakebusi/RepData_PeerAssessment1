@@ -1,3 +1,6 @@
+---
+output: pdf_document
+---
 ## Introduction
 
 It is now possible to collect a large amount of data about personal
