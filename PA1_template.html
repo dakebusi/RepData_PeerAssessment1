@@ -325,7 +325,7 @@ new_activity[is.na(activity)] &lt;- repeated_means[is.na(activity)]
 <pre><code>## [1] 10766.19
 </code></pre>
 
-<p>These values differ from the mean and median when missing values were ignored. <strong>This shows that one has to be careful when replacing missing values!</strong> </p>
+<p>The value of the mean is unchanged (since we replaced missing values by the already computed mean, so the new mean doesn&#39;t change). However, the median sligthly changed due to the addition of new values. <strong>This shows that one has to be careful when replacing missing values!</strong> </p>
 
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
 

@@ -167,7 +167,7 @@ median(total_steps_per_day_new)
 ## [1] 10766.19
 ```
 
-These values differ from the mean and median when missing values were ignored. **This shows that one has to be careful when replacing missing values!** 
+The value of the mean is unchanged (since we replaced missing values by the already computed mean, so the new mean doesn't change). However, the median sligthly changed due to the addition of new values. **This shows that one has to be careful when replacing missing values!** 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
