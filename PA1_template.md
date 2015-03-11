@@ -20,11 +20,13 @@ activity$date <- as.Date(activity$date)
 
 ## What is mean total number of steps taken per day?
 
-Sum the number of steps for each date, ignoring the missing values:
+Sum the number of steps for each date, ignoring the missing values. Setting na.rm=TRUE is not sufficient because some days with all missing values would count as days with 0 total steps, while they should be completely ignored, thus we need to really use only those rows with valid values:
 
 
 ```r
-total_steps_per_day <- tapply(activity$steps,activity$date, sum, na.rm=TRUE)
+total_steps_per_day <- tapply(activity$steps[!is.na(activity)],
+                              activity$date[!is.na(activity)], sum, 
+                              na.rm=TRUE)
 ```
 
 Plot the histogram of total number of steps per day:
@@ -44,7 +46,7 @@ mean(total_steps_per_day)
 ```
 
 ```
-## [1] 9354.23
+## [1] 10766.19
 ```
 
 ```r
@@ -52,7 +54,7 @@ median(total_steps_per_day)
 ```
 
 ```
-## [1] 10395
+## [1] 10765
 ```
 
 ## What is the average daily activity pattern?
